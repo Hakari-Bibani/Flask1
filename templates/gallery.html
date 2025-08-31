@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>🖼️ Project Gallery</h1>
+  <hr>
+
+  <style>
+    .gal-card {
+      background-color: #2f2f2f;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      margin-bottom: 15px;
+      color: #fff;
+    }
+    .gal-card a {
+      text-decoration: none;
+      color: #1ABC9C;
+    }
+    .gal-card a:hover {
+      text-decoration: underline;
+    }
+    .gal-card-title {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+    .gal-card p, .gal-card li {
+      color: #ffffff;
+      line-height: 1.5;
+    }
+    ul.gal-highlights { padding-left: 20px; }
+  </style>
+
+  {% if not cards %}
+    <div class="info" style="background:#1f2a30; color:#d9f5ee; padding:14px 16px; border-radius:10px;">
+      No gallery items found. Add cards to <code>input/gallery.json</code>.
+    </div>
+  {% else %}
+    {% for card in cards %}
+      <div class="gal-card">
+        <div class="gal-card-title">
+          <a href="{{ card.get('demo_url', '#') }}" target="_blank">
+            {{ card.get('headline', 'Untitled') }}
+          </a>
+        </div>
+        <p>{{ card.get('description','') }}</p>
+
+        {% set highlights = card.get('highlights') %}
+        {% if highlights %}
+          <ul class="gal-highlights">
+            {% for item in highlights %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
