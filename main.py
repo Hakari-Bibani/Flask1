@@ -1,21 +1,21 @@
-# main.py
-from flask import Flask, render_template, render_template_string, url_for
-from jinja2 import TemplateNotFound
 import os
 import json
-import pathlib
 import csv
-
-# Optional: MySQL participants view
+import pathlib
+import mimetypes
+from flask import Flask, render_template, render_template_string, url_for
 import mysql.connector
 from mysql.connector import Error
 
+# ────────────────────── Ensure SVG served correctly ──────────────────────
+mimetypes.add_type("image/svg+xml", ".svg")
+
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
-# ───────────────────────── Site-wide config ─────────────────────────
+# ────────────────────────── Site-wide config ────────────────────────────
 SITE_TITLE = "AI for Impact"
 SITE_EMAIL = "connect@aiforimpact.net"
-SITE_LOGO = "input/logo_improved.png"   # put the file at static/input/logo_improved.png
+SITE_LOGO = "input/logo_improved.png"  # put at static/input/logo_improved.png
 SITE_FOOTER_HTML = """
 <div style="text-align: center; margin-top: 50px; font-size: 0.9em; color: #7F8C8D;">
     aiforimpact © 2024<br>
@@ -23,19 +23,17 @@ SITE_FOOTER_HTML = """
 </div>
 """
 
-# Navbar items (name, endpoint, template name)
 NAV_ITEMS = [
-    ("Home",         "home",         "home.html"),
-    ("Trainings",    "trainings",    "trainings.html"),
-    ("Pricing",      "pricing",      "prices.html"),
-    ("Gallery",      "gallery",      "gallery.html"),
-    ("Certificate",  "certificate",  "certificate.html"),
+    ("Home", "home", "home.html"),
+    ("Trainings", "trainings", "trainings.html"),
+    ("Pricing", "pricing", "prices.html"),
+    ("Gallery", "gallery", "gallery.html"),
+    ("Certificate", "certificate", "certificate.html"),
     ("Participants", "participants", "participants.html"),
-    ("About",        "about",        "about.html"),
-    ("Contact",      "contact",      "contact.html"),
+    ("About", "about", "about.html"),
+    ("Contact", "contact", "contact.html"),
 ]
 
-# Make nav + globals available in all templates
 @app.context_processor
 def inject_globals():
     return {
@@ -46,45 +44,41 @@ def inject_globals():
         "SITE_FOOTER_HTML": SITE_FOOTER_HTML,
     }
 
-# Helper: render a page, falling back to a minimal placeholder if template missing
 def render_page(template_name: str, page_title: str, **ctx):
     try:
         return render_template(template_name, page_title=page_title, **ctx)
-    except TemplateNotFound:
-        placeholder = f"""
-        <!doctype html>
-        <html lang="en">
-        <head>
-            <meta charset="utf-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>{{{{ page_title }}}} — {{{{ SITE_TITLE }}}}</title>
-            <link rel="icon" href="{{{{ SITE_LOGO_URL }}}}">
-            <link rel="stylesheet" href="{{{{ url_for('static', filename='style.css') }}}}">
-        </head>
-        <body>
-            <div class="layout">
-                <aside class="sidebar">
-                    <img src="{{{{ SITE_LOGO_URL }}}}" alt="Logo" class="logo" />
-                    {{% for name, endpoint, _ in NAV_ITEMS %}}
-                      <a class="nav-link" href="{{{{ url_for(endpoint) }}}}">{{{{ name }}}}</a>
-                    {{% endfor %}}
-                    <div class="sidebar-contact">
-                        <p><strong>Contact</strong></p>
-                        <p><a href="mailto:{{{{ SITE_EMAIL }}}}">{{{{ SITE_EMAIL }}}}</a></p>
-                    </div>
-                </aside>
-                <main class="content">
-                    <h1 style="margin-top:0;">{{{{ page_title }}}}</h1>
-                    <p>This is a temporary placeholder. Create <code>{template_name}</code> in <code>templates/</code> to customize this page.</p>
-                    <div class="footer">{{{{ SITE_FOOTER_HTML|safe }}}}</div>
-                </main>
-            </div>
-        </body>
-        </html>
-        """
-        return render_template_string(placeholder, page_title=page_title)
+    except Exception:
+        # fallback minimal page
+        return render_template_string(
+            """
+            <!doctype html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <title>{{ page_title }} — {{ SITE_TITLE }}</title>
+                <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+            </head>
+            <body>
+                <div class="layout">
+                    <aside class="sidebar">
+                        <img src="{{ SITE_LOGO_URL }}" class="logo">
+                        {% for name, endpoint, _ in NAV_ITEMS %}
+                          <a class="nav-link" href="{{ url_for(endpoint) }}">{{ name }}</a>
+                        {% endfor %}
+                    </aside>
+                    <main class="content">
+                        <h1>{{ page_title }}</h1>
+                        <p>Template {{ template_name }} not found.</p>
+                        <div class="footer">{{ SITE_FOOTER_HTML|safe }}</div>
+                    </main>
+                </div>
+            </body>
+            </html>
+            """,
+            page_title=page_title, template_name=template_name
+        )
 
-# ───────────────────────── Home / simple pages ──────────────────────
+# ─────────────────────────── Home / simple pages ───────────────────────────
 @app.route("/")
 def home():
     return render_page("home.html", "Home")
@@ -101,7 +95,7 @@ def about():
 def contact():
     return render_page("contact.html", "Contact")
 
-# ───────────────────────── Trainings page ───────────────────────────
+# ─────────────────────────── Trainings page ───────────────────────────────
 def get_trainings():
     return {
         "courses": [
@@ -137,7 +131,7 @@ def trainings():
     data = get_trainings()
     return render_page("trainings.html", "Trainings", courses=data["courses"])
 
-# ───────────────────────── Gallery page ─────────────────────────────
+# ─────────────────────────── Gallery page ────────────────────────────────
 def load_gallery_cards():
     path = pathlib.Path("input/gallery.json")
     if path.is_file():
@@ -152,30 +146,22 @@ def gallery():
     cards = load_gallery_cards()
     return render_page("gallery.html", "Gallery", cards=cards)
 
-# ───────────────────────── Certificate page ─────────────────────────
+# ─────────────────────────── Certificate page ───────────────────────────
 GITHUB_BASE_URL = "https://raw.githubusercontent.com/hawkarabdulhaq/pythondemo/main/"
 
 def load_certificates(csv_path="input/certificate.csv"):
-    """
-    Returns a list of participants with completed certificates.
-    CSV columns: name, date of joining, date of completion, credential, certificate
-    """
     rows = []
     if not os.path.exists(csv_path):
         return rows
-
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         for r in reader:
             rec = {k.strip(): (v or "").strip() for k, v in r.items()}
-            completion = rec.get("date of completion", "")
-            if completion:
+            if rec.get("date of completion"):
                 cert_path = rec.get("certificate", "")
                 if cert_path.startswith("certificates/"):
                     rec["_certificate_url"] = GITHUB_BASE_URL + cert_path
                 elif os.path.exists(cert_path):
-                    # If you put images under static/, store relative path like "certificates/abc.png"
-                    # and build a static URL in the template with url_for('static', filename=...)
                     rec["_certificate_url"] = cert_path
                 else:
                     rec["_certificate_url"] = None
@@ -187,8 +173,7 @@ def certificate():
     participants = load_certificates()
     return render_page("certificate.html", "Certificate", participants=participants)
 
-# ───────────────────────── Participants page (MySQL) ────────────────
-# progress constants (week 5 changed to 4)
+# ─────────────────────────── Participants page ──────────────────────────
 REQUIRED_TABS = {1: 10, 2: 12, 3: 12, 4: 7, 5: 4}
 TOTAL_REQUIRED = sum(REQUIRED_TABS.values()) or 1
 WEEK_COLORS = {1: "#27c93f", 2: "#0ff", 3: "#b19cd9", 4: "#ffbd2e", 5: "#f44"}
@@ -206,27 +191,14 @@ def _get_mysql_conn():
 
 def _compute_weeks_render(weeks_dict):
     items = []
-    for num in [1, 2, 3, 4, 5]:
-        req = REQUIRED_TABS.get(num, 0) or 1
+    for num in REQUIRED_TABS:
+        req = REQUIRED_TABS[num]
         done = weeks_dict.get(num, 0) or 0
         pct = min(100, round(done / req * 100))
-        items.append({
-            "num": num,
-            "done": done,
-            "req": req,
-            "pct": pct,
-            "color": WEEK_COLORS.get(num, "#00d4ff"),
-        })
+        items.append({"num": num, "done": done, "req": req, "pct": pct, "color": WEEK_COLORS[num]})
     return items
 
 def fetch_participants():
-    """
-    Returns sorted list of participants:
-    [
-      { 'fullname': str, 'doj': 'YYYY-MM-DD', 'percent': int, 'weeks_render': [ ... ] },
-      ...
-    ]
-    """
     query = (
         "SELECT u.fullname, u.username, u.date_of_joining, "
         "p.week1track, p.week2track, p.week3track, p.week4track, p.week5track "
@@ -247,8 +219,7 @@ def fetch_participants():
                     "weeks_render": _compute_weeks_render(weeks),
                 })
     except Error as e:
-        # Log error; template will show a friendly message when list is empty
-        print("DB error (participants):", getattr(e, "msg", e))
+        print("DB error:", getattr(e, "msg", e))
     return sorted(out, key=lambda r: (-r["percent"], r["fullname"]))
 
 @app.route("/participants")
@@ -258,22 +229,12 @@ def participants():
     stats = {"count": len(data), "avg": f"{avg:.1f}"}
     return render_page("participants.html", "Participants", participants=data, stats=stats)
 
-# ───────────────────────── Error pages ──────────────────────────────
+# ─────────────────────────── Error handlers ──────────────────────────
 @app.errorhandler(404)
 def not_found(e):
     return render_template_string(
-        """
-        <!doctype html>
-        <title>Page Not Found — {{ SITE_TITLE }}</title>
-        <div style="font-family: system-ui; padding: 40px;">
-            <h1>404 — Page Not Found</h1>
-            <p>We couldn't find that page. Use the menu to navigate.</p>
-            <p><a href="{{ url_for('home') }}">Back to Home</a></p>
-        </div>
-        """,
+        "<h1>404 — Page Not Found</h1><p><a href='{{ url_for('home') }}'>Back Home</a></p>"
     ), 404
 
-# ───────────────────────── Entrypoint ───────────────────────────────
 if __name__ == "__main__":
-    # Local dev
     app.run(debug=True, host="0.0.0.0", port=5000)
