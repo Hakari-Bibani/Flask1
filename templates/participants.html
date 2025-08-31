@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block content %}
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap');
+    :root{
+      --bg1:#0d1117; --bg2:#161b22; --bg3:#21262d; --green:#00ff41; --cyan:#00d4ff; --yellow:#ffcc02; --border:#30363d;
+      --text:#f0f6fc; --text2:#8b949e;
+    }
+    .terminal{
+      width:95%; max-width:1000px; margin:10px auto; background:var(--bg1); border:2px solid var(--green);
+      border-radius:12px; padding:26px; overflow:visible; font-family:'JetBrains Mono', monospace; color:var(--text);
+    }
+    .header{ display:flex; align-items:center; margin-bottom:22px; padding-bottom:14px; border-bottom:1px solid var(--border); }
+    .title{ color:var(--cyan); font-size:1.6rem; font-weight:700; margin-right:auto; }
+    .stats{ color:var(--text2); font-size:.9rem; }
+    .divider{ border-top:1px solid var(--border); margin:10px 0; }
+    .participant{ padding:10px 0; }
+    .p-head{ display:flex; align-items:center; margin-bottom:8px; gap:8px; }
+    .p-name{ font-size:1rem; font-weight:600; color:var(--yellow); }
+    .p-doj{ font-size:.75rem; color:var(--text2); }
+    .badge{ display:flex; align-items:center; background:var(--bg3); padding:4px 10px; border-radius:18px; border:1px solid var(--border); margin-left:auto; gap:6px; }
+    .pct{ font-weight:700; color:var(--green); }
+    .o-bar{ width:90px; height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+    .o-prog{ height:100%; background:linear-gradient(90deg,var(--green),var(--cyan)); }
+    .weeks{ display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:6px; }
+    .w-item{ display:flex; align-items:center; background:var(--bg2); padding:4px 8px; border-radius:5px; border-left:3px solid; }
+    .w-lbl{ font-size:.75rem; margin-right:4px; }
+    .w-prog{ flex:1; height:5px; background:var(--bg1); border-radius:2px; overflow:hidden; margin-right:4px; }
+    .w-bar{ height:100%; border-radius:2px; }
+    .w-count{ font-size:.7rem; color:var(--text2); }
+    .no-data{ text-align:center; color:var(--text2); margin:40px 0; font-style:italic; }
+  </style>
+
+  <div class="terminal">
+    <div class="header">
+      <div class="title">⚡ Participants</div>
+      <div class="stats">👥 {{ stats.count }} | Avg {{ stats.avg }}%</div>
+    </div>
+
+    {% if not participants %}
+      <p class="no-data">No participants found (or database connection failed).</p>
+    {% else %}
+      {% for p in participants %}
+        <div class="participant">
+          <div class="p-head">
+            <span class="p-name">{{ p.fullname }}</span>
+            <span class="p-doj">{{ p.doj }}</span>
+
+            <div class="badge">
+              <span class="pct">{{ p.percent }}%</span>
+              <div class="o-bar"><div class="o-prog" style="width: {{ p.percent }}%"></div></div>
+            </div>
+          </div>
+
+          <div class="weeks">
+            {% for w in p.weeks_render %}
+              <div class="w-item" style="border-left-color: {{ w.color }};">
+                <span class="w-lbl" style="color: {{ w.color }};">W{{ w.num }}</span>
+                <div class="w-prog"><div class="w-bar" style="background: {{ w.color }}; width: {{ w.pct }}%;"></div></div>
+                <span class="w-count">{{ w.done }}/{{ w.req }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="divider"></div>
+      {% endfor %}
+    {% endif %}
+  </div>
+{% endblock %}
