@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Our Courses</h1>
+  <hr>
+
+  <style>
+    /* Inline to keep this file self-contained; feel free to move to static/style.css */
+    .card-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .card {
+      background: #2f2f2f;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      flex: 1 1 calc(50% - 20px);
+      max-width: calc(100% - 20px);
+      margin-bottom: 20px;
+      color: #fff;
+    }
+    .card h3 {
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    .card p {
+      color: #ffffff;
+      line-height: 1.5;
+    }
+    .card ul {
+      padding-left: 20px;
+      color: #ffffff;
+    }
+    .request-button {
+      background-color: #ffffff;
+      border: none;
+      color: #111;
+      font-weight: bold;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 12px;
+    }
+    @media screen and (max-width: 768px) {
+      .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
+    }
+  </style>
+
+  <div class="card-container">
+    {% for course in courses %}
+      <div class="card">
+        <h3>{{ course.name }}</h3>
+        <img src="{{ course.image }}" alt="{{ course.name }}">
+
+        <p><strong>Impact:</strong> {{ course.impact }}</p>
+
+        <p><strong>Course Chapters:</strong></p>
+        <ul>
+          {% for chapter in course.chapters %}
+            <li>{{ chapter }}</li>
+          {% endfor %}
+        </ul>
+
+        <p><strong>Availability:</strong> {{ course.availability }}</p>
+        <p><strong>Price:</strong> {{ course.price }}</p>
+
+        <a class="request-button" href="{{ course.request_url }}" target="_blank">Request</a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
