@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>🎓 Certificate Database</h1>
+  <hr>
+
+  {% if not participants %}
+    <div class="info" style="background:#1f2a30; color:#d9f5ee; padding:14px 16px; border-radius:10px;">
+      Certificate database not found or no participants have completed the course yet.
+    </div>
+  {% else %}
+    <style>
+      .cert-row {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        gap: 24px;
+        align-items: start;
+        background: #2f2f2f;
+        border-radius: 12px;
+        padding: 16px;
+        color: #fff;
+        margin-bottom: 16px;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      }
+      .cert-col h3 { margin: 0 0 8px 0; }
+      .cert-meta p { margin: 4px 0; }
+      .cert-img img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        background: #111;
+      }
+      @media (max-width: 860px) {
+        .cert-row { grid-template-columns: 1fr; }
+      }
+    </style>
+
+    {% for p in participants %}
+      <div class="cert-row">
+        <div class="cert-col cert-meta">
+          <h3>{{ p.get('name','') }}</h3>
+          <p><strong>Name:</strong> {{ p.get('name','') }}</p>
+          <p><strong>Date of Joining:</strong> {{ p.get('date of joining','') }}</p>
+          <p><strong>Date of Completion:</strong> {{ p.get('date of completion','') }}</p>
+          <p><strong>Credential:</strong> {{ p.get('credential','') }}</p>
+        </div>
+
+        <div class="cert-col cert-img">
+          {% if p.get('_certificate_url') %}
+            {% if p.get('_certificate_url').startswith('http') %}
+              <img src="{{ p.get('_certificate_url') }}" alt="Certificate for {{ p.get('name','') }}">
+            {% else %}
+              <!-- If you move certificates under /static, build a static URL -->
+              <img src="{{ p.get('_certificate_url') }}" alt="Certificate for {{ p.get('name','') }}">
+            {% endif %}
+          {% else %}
+            <div style="background:#111; color:#bbb; padding:20px; border-radius:8px;">
+              Certificate not found: {{ p.get('certificate','(missing)') }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endblock %}
