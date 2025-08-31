@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page_title }} — {{ SITE_TITLE }}</title>
+  <link rel="icon" href="{{ SITE_LOGO_URL }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <img src="{{ SITE_LOGO_URL }}" alt="Logo" width="200" />
+      {% for name, endpoint, _ in NAV_ITEMS %}
+        <a class="nav-link" href="{{ url_for(endpoint) }}">{{ name }}</a>
+      {% endfor %}
+      <div class="contact">
+        <p><strong>Contact</strong></p>
+        <p>Email: <a href="mailto:{{ SITE_EMAIL }}">{{ SITE_EMAIL }}</a></p>
+      </div>
+    </aside>
+    <main class="content">
+      {% block content %}{% endblock %}
+      <div class="footer">{{ SITE_FOOTER_HTML|safe }}</div>
+    </main>
+  </div>
+</body>
+</html>
