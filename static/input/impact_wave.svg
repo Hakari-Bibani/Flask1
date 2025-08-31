@@ -1,0 +1,203 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450">
+    <defs>
+        <!-- Previous gradients and filters remain -->
+        <linearGradient id="impactWave" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#808080">
+                <animate attributeName="stop-color" values="#808080;#909090;#808080" dur="5s" repeatCount="indefinite"/>
+            </stop>
+            <stop offset="50%" style="stop-color:#A9A9A9">
+                <animate attributeName="stop-color" values="#A9A9A9;#B9B9B9;#A9A9A9" dur="5s" repeatCount="indefinite"/>
+            </stop>
+            <stop offset="100%" style="stop-color:#D3D3D3">
+                <animate attributeName="stop-color" values="#D3D3D3;#E3E3E3;#D3D3D3" dur="5s" repeatCount="indefinite"/>
+            </stop>
+        </linearGradient>
+
+        <!-- Enhanced Glow Effect -->
+        <filter id="advancedGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur1"/>
+            <feGaussianBlur stdDeviation="6" result="blur2"/>
+            <feFlood flood-color="#808080" flood-opacity="0.3" result="color1"/>
+            <feFlood flood-color="#A9A9A9" flood-opacity="0.2" result="color2"/>
+            <feComposite in="color1" in2="blur1" operator="in" result="glow1"/>
+            <feComposite in="color2" in2="blur2" operator="in" result="glow2"/>
+            <feMerge>
+                <feMergeNode in="glow1"/>
+                <feMergeNode in="glow2"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+
+        <!-- New Data Flow Effect -->
+        <filter id="dataFlow">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2">
+                <animate attributeName="baseFrequency" values="0.01;0.02;0.01" dur="10s" repeatCount="indefinite"/>
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" scale="5"/>
+        </filter>
+
+        <!-- Enhanced Tech Pattern -->
+        <pattern id="techGrid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M20 0 v40 M0 20 h40" stroke="#696969" stroke-width="0.5" opacity="0.15"/>
+            <circle cx="20" cy="20" r="1" fill="#696969" opacity="0.2"/>
+            <path d="M0 0 l40 40 M40 0 l-40 40" stroke="#696969" stroke-width="0.25" opacity="0.1"/>
+        </pattern>
+
+        <!-- New Circuit Pattern -->
+        <pattern id="circuitPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M10 10 h30 v30 h-30 z" stroke="#808080" fill="none" stroke-width="0.5" opacity="0.1"/>
+            <circle cx="10" cy="10" r="2" fill="#A9A9A9" opacity="0.2"/>
+            <path d="M50 50 l20 0 l0 20" stroke="#808080" fill="none" stroke-width="0.5" opacity="0.1"/>
+        </pattern>
+
+        <!-- Particle Gradients -->
+        <radialGradient id="particleGrad">
+            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#808080" stop-opacity="0"/>
+        </radialGradient>
+    </defs>
+
+    <!-- Layered Background -->
+    <rect width="800" height="450" fill="#000000"/>
+    <rect width="800" height="450" fill="url(#techGrid)">
+        <animate attributeName="opacity" values="0.8;1;0.8" dur="10s" repeatCount="indefinite"/>
+    </rect>
+    <rect width="800" height="450" fill="url(#circuitPattern)" opacity="0.1"/>
+
+    <!-- Dynamic Wave System -->
+    <g transform="translate(50, 50)" filter="url(#advancedGlow)" opacity="0.4">
+        <path d="M0 150 C150 100 250 200 400 150 S700 100 800 150" stroke="url(#impactWave)" stroke-width="2" fill="none">
+            <animate attributeName="d" 
+                     dur="10s" 
+                     values="M0 150 C150 100 250 200 400 150 S700 100 800 150;
+                            M0 170 C150 120 250 220 400 170 S700 120 800 170;
+                            M0 130 C150 80 250 180 400 130 S700 80 800 130;
+                            M0 150 C150 100 250 200 400 150 S700 100 800 150"
+                     repeatCount="indefinite"/>
+        </path>
+    </g>
+
+    <!-- Neural Network with More Nodes -->
+    <g transform="translate(100, 100)" filter="url(#advancedGlow)">
+        <g class="neural-network">
+            <!-- Connection lines -->
+            <path d="M0 100 Q150 50 300 100 T600 100" stroke="url(#impactWave)" stroke-width="1.5" fill="none" opacity="0.6">
+                <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="7s" repeatCount="indefinite"/>
+            </path>
+            <path d="M0 150 Q150 100 300 150 T600 150" stroke="url(#impactWave)" stroke-width="1.5" fill="none" opacity="0.6">
+                <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="7s" begin="1s" repeatCount="indefinite"/>
+            </path>
+            <path d="M0 200 Q150 150 300 200 T600 200" stroke="url(#impactWave)" stroke-width="1.5" fill="none" opacity="0.6">
+                <animate attributeName="stroke-dasharray" values="0,1000;1000,0" dur="7s" begin="2s" repeatCount="indefinite"/>
+            </path>
+            
+            <!-- Network Nodes -->
+            <g class="nodes">
+                <circle cx="0" cy="100" r="4" fill="#D3D3D3" opacity="0.8">
+                    <animate attributeName="r" values="4;6;4" dur="3s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="150" cy="150" r="4" fill="#D3D3D3" opacity="0.8">
+                    <animate attributeName="r" values="4;6;4" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="300" cy="100" r="4" fill="#D3D3D3" opacity="0.8">
+                    <animate attributeName="r" values="4;6;4" dur="3s" begin="1s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="450" cy="150" r="4" fill="#D3D3D3" opacity="0.8">
+                    <animate attributeName="r" values="4;6;4" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="600" cy="200" r="4" fill="#D3D3D3" opacity="0.8">
+                    <animate attributeName="r" values="4;6;4" dur="3s" begin="2s" repeatCount="indefinite"/>
+                </circle>
+            </g>
+        </g>
+    </g>
+
+    <!-- Enhanced Code Elements with Data Flow Effect -->
+    <g transform="translate(500, 140)" filter="url(#advancedGlow)">
+        <g class="code-snippet" opacity="0.9" filter="url(#dataFlow)">
+            <text x="0" y="0" font-family="JetBrains Mono, monospace" fill="#A9A9A9" font-size="14">
+                class KurdistanFuture:
+                <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" repeatCount="indefinite"/>
+            </text>
+            <text x="20" y="25" font-family="JetBrains Mono, monospace" fill="#A9A9A9" font-size="14">
+                def innovate(self):
+                <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+            </text>
+            <text x="40" y="50" font-family="JetBrains Mono, monospace" fill="#A9A9A9" font-size="14">
+                return AI.transform_region()
+                <animate attributeName="opacity" values="0.8;1;0.8" dur="4s" begin="1s" repeatCount="indefinite"/>
+            </text>
+        </g>
+    </g>
+
+    <!-- Enhanced Titles -->
+    <g transform="translate(400, 80)" filter="url(#advancedGlow)">
+        <text text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="32" fill="#D3D3D3" font-weight="bold">
+            Utilize AI and Machine Learning Faster and Smarter
+            <animate attributeName="opacity" values="0.9;1;0.9" dur="4s" repeatCount="indefinite"/>
+        </text>
+    </g>
+
+    <g transform="translate(400, 420)" filter="url(#advancedGlow)">
+        <text text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="22" fill="#A9A9A9">
+            Transform your business into a data-driven, more resilient enterprise with us!
+            <animate attributeName="opacity" values="0.8;1;0.8" dur="5s" repeatCount="indefinite"/>
+        </text>
+    </g>
+
+    <!-- Enhanced Particle System with More Particles -->
+    <g class="particles">
+        <!-- Original particles -->
+        <circle cx="150" cy="200" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="200;180;200" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="150;160;150" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="650" cy="180" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="180;160;180" dur="5s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="650;660;650" dur="5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="400" cy="150" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="150;130;150" dur="6s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="400;410;400" dur="6s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="200" cy="300" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="300;280;300" dur="7s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="200;210;200" dur="7s" repeatCount="indefinite"/>
+        </circle>
+        
+        <!-- New additional particles -->
+        <circle cx="300" cy="250" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="250;230;250" dur="5s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="300;310;300" dur="5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="500" cy="200" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="200;180;200" dur="6s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="500;510;500" dur="6s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="700" cy="300" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="300;280;300" dur="7s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="700;710;700" dur="7s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="100" cy="350" r="2" fill="url(#particleGrad)">
+            <animate attributeName="cy" values="350;330;350" dur="8s" repeatCount="indefinite"/>
+            <animate attributeName="cx" values="100;110;100" dur="8s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+
+    <!-- New Interactive Data Points -->
+    <g class="data-points">
+        <circle cx="250" cy="200" r="3" fill="#A9A9A9" opacity="0.6">
+            <animate attributeName="r" values="3;5;3" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6;0.8;0.6" dur="4s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="450" cy="250" r="3" fill="#A9A9A9" opacity="0.6">
+            <animate attributeName="r" values="3;5;3" dur="4s" begin="1s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6;0.8;0.6" dur="4s" begin="1s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="650" cy="150" r="3" fill="#A9A9A9" opacity="0.6">
+            <animate attributeName="r" values="3;5;3" dur="4s" begin="2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.6;0.8;0.6" dur="4s" begin="2s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+</svg>
