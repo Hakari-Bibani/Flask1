@@ -1,0 +1,173 @@
+/* Global font (as in style.py) */
+* {
+  font-family: "Courier", monospace;
+}
+
+/* Theme variables */
+:root {
+  --bg-color: #FFFFFF;
+  --text-color: #2C3E50;
+  --section-title-color: #34495E;
+  --highlight-color: #1ABC9C;
+  --border-color: #34495E;
+
+  /* Layout helpers */
+  --sidebar-bg: #11181C;
+  --sidebar-fg: #EEEEEE;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #1E1E1E;
+    --text-color: #F0F0F0;
+    --section-title-color: #F0F0F0;
+    --highlight-color: #4DC9B2;
+    --border-color: #4DC9B2;
+  }
+}
+
+/* Base */
+html, body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+}
+
+/* Layout used by base.html and placeholder */
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--sidebar-bg);
+  color: var(--sidebar-fg);
+  padding: 24px;
+}
+
+.sidebar .logo {
+  max-width: 200px;
+  display: block;
+  margin-bottom: 24px;
+}
+
+.nav-link {
+  display: block;
+  color: var(--sidebar-fg);
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.nav-link:hover {
+  background: #1f2a30;
+}
+
+.sidebar-contact {
+  margin-top: 30px;
+  font-size: 1.05em;
+}
+
+.sidebar-contact a {
+  color: var(--highlight-color);
+  text-decoration: none;
+}
+
+.content {
+  padding: 28px 32px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 48px;
+  color: #7F8C8D;
+  font-size: 0.9em;
+  text-align: center;
+}
+
+/* Titles & sections (from style.py) */
+.title {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: var(--text-color);
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: var(--section-title-color);
+  margin-top: 30px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 5px;
+  text-align: left;
+}
+
+.content p, .content li, .content {
+  font-size: 1.1em;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Highlight text */
+.highlight {
+  font-weight: bold;
+  color: var(--highlight-color);
+}
+
+/* Video container (from style.py) */
+.video-container {
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: var(--bg-color);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+iframe {
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+}
+
+/* Pricing boxes (from style.py) */
+.pricing-box {
+  font-size: 0.9em;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f4f8fb;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.pricing-feature {
+  margin: 5px 0;
+  white-space: nowrap; /* prevent wrapping in tight containers */
+  font-size: 0.9em;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 980px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .content {
+    padding: 20px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .title { font-size: 2em; }
+  .section-title { font-size: 1.5em; }
+  .content { font-size: 1em; }
+  .video-container { padding: 5px; }
+}
